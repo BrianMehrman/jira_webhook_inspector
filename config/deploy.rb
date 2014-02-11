@@ -1,25 +1,35 @@
-set :application, "set your application name here"
-set :repository,  "set your repository location here"
+set :stages, %w(testing production)
+set :default_stage, "production"
 
-# set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
-# Or: `accurev`, `bzr`, `cvs`, `darcs`, `git`, `mercurial`, `perforce`, `subversion` or `none`
+set :application, "jira_webhook_inspector"
+set :repository,  "git@github.com:BrianMehrman/jira_webhook_inspector.git"
 
-role :web, "your web-server here"                          # Your HTTP server, Apache/etc
-role :app, "your app-server here"                          # This may be the same as your `Web` server
-role :db,  "your primary db-server here", :primary => true # This is where Rails migrations will run
-role :db,  "your slave db-server here"
 
-# if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
+set :scm, :git # You can set :scm explicitly or Capistrano will make an intelligent guess based on known version control directory names
 
-# if you're still using the script/reaper helper you will need
-# these http://github.com/rails/irs_process_scripts
+set :user, "ubuntu"
 
-# If you are using Passenger mod_rails uncomment this:
-# namespace :deploy do
-#   task :start do ; end
-#   task :stop do ; end
-#   task :restart, :roles => :app, :except => { :no_release => true } do
-#     run "#{try_sudo} touch #{File.join(current_path,'tmp','restart.txt')}"
-#   end
-# end
+set :deploy_to, "/var/www/jira_webhook_inspector"
+
+desc "check production task"
+task :check_production do
+  if stage.to_s == "production"
+    puts " \n Are you sure you want to deploy to Production"
+    puts " \n Enter the password to continue\n"
+
+    password= STDIN.gets.chomp rescue nil
+
+    if password != "password"
+      puts "\n !!! WRONG PASSWORD !!!"
+      exit
+    end
+  end
+end
+
+role :web, "ec2-54-184-196-55.us-west-2.compute.amazonaws.com"
+role :app, "ec2-54-184-196-55.us-west-2.compute.amazonaws.com"
+role :db, "ec2-54-184-196-55.us-west-2.compute.amazonaws.com"
+
+before "deploy", "check_production"
+
+
