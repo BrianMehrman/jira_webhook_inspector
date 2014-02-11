@@ -18,6 +18,7 @@ gem 'mysql2'
 
 gem 'coffee-filter'
 gem 'coffeebeans'
+
 group :assets do
   gem 'sass-rails', '~> 4.0.0'
   gem 'bootstrap-sass', '~> 2.2.2.0'
