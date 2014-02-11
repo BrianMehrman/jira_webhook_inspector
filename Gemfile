@@ -19,6 +19,9 @@ gem 'mysql2'
 gem 'coffee-filter'
 gem 'coffeebeans'
 
+gem 'execjs'
+gem 'therubyracer', :platforms => :ruby
+
 group :assets do
   gem 'sass-rails', '~> 4.0.0'
   gem 'bootstrap-sass', '~> 2.2.2.0'
