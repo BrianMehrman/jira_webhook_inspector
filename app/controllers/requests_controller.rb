@@ -64,7 +64,7 @@ class RequestsController < ApplicationController
   end
 
   def webhook
-    r = Request.new data: params
+    r = Request.new data: params.to_json
     r.save
 
     render nothing:true
